@@ -82,14 +82,20 @@ bezpośrednio wchodzą w interakcje z elementami umieszczonymi na płycie Elvis 
   \begin{subfigure}{.48\textwidth}
     \centering
     \includegraphics[width=\linewidth]{img/obraz2.png}
-    \caption{Opis 1}
+    \caption{sygnał trojkatny A=5V , f=10Hz, offset=0V, faza=0\degree}
     \label{fig:sub1}
   \end{subfigure}\hfill
   \begin{subfigure}{.48\textwidth}
     \centering
     \includegraphics[width=\linewidth]{img/obraz3.png}
-    \caption{Opis 2}
+    \caption{sygnał sinusoidalny A=3.5V , f=100Hz, offset=5V, faza=0\degree}
     \label{fig:sub2}
+  \end{subfigure}
+  \begin{subfigure}{.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{img/obraz4.png}
+    \caption{sygnał tropjkatny A=1V , f=20Hz, offset=-3V, faza=0\degree}
+    \label{fig:sub3}
   \end{subfigure}
 
   \caption{Przebiegi sygnałów wraz z nastawami}
@@ -102,10 +108,31 @@ Zmodyfikowaliśmy połączenie na płycie tak ze pomiędzy wyjściem i wejściem
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{img/obraz5.png}
-    \caption{Enter Caption}
+    \includegraphics[width=0.3\linewidth]{img/obraz5.png}
+    \caption{układ z kondensatorem}
     \label{fig:placeholder}
 \end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{img/image.png}
+    \caption{Przebieg sygnału na wejściu i wyjściu}
+    \label{fig:placeholder}
+\end{figure}
+
+Zbudowany przez nas układ pełni funkcje filtru górnoprzepustowego. Można to zaobserwowac przygladajac sie przebiegowi sygnału zarejestrowanego przez 
+LabVIEW.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{img/image2.png}
+    \caption{Przebieg sygnału poddanego filtracji}
+    \label{fig:placeholder}
+\end{figure}
+
+Na przebiegu powyżej można zauważyć, że sygnał na wyjściu filtru nie ma w sobie składowej stałej. Jest to spowodowane obecnością kondensatora, który pełni funkcje filtru górnoprzepustowego.
+
+\section{Wnioski}
 
 
 
