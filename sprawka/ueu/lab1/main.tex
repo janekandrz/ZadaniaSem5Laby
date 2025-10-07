@@ -1,5 +1,9 @@
 \documentclass[11pt]{article}
 
+\pdfobjcompresslevel=3    % compress PDF objects
+\pdfcompresslevel=9       % compress streams more (0..9)
+\pdfminorversion=4
+
 
 \usepackage[utf8]{inputenc} % remove if using XeLaTeX or LuaLaTeX
 \usepackage[T1]{fontenc}
@@ -53,7 +57,7 @@ Grupa Lab4  &  &  \\
 \begin{tabular}{lllll}
 \cline{1-4}
 \multicolumn{1}{|l|}{nr. stanowiska} & \multicolumn{1}{l|}{nr. Elvisa} & \multicolumn{1}{l|}{płyta prototypowa} & \multicolumn{1}{l|}{elementy} &  \\ \cline{1-4}
-\multicolumn{1}{|l|}{}               & \multicolumn{1}{l|}{}           & \multicolumn{1}{l|}{}                  & \multicolumn{1}{l|}{}         &  \\ \cline{1-4}
+\multicolumn{1}{|l|}{2}               & \multicolumn{1}{l|}{2}           & \multicolumn{1}{l|}{}                  & \multicolumn{1}{l|}{}         &  \\ \cline{1-4}
 \end{tabular}
 \end{table}
 
@@ -72,7 +76,7 @@ bezpośrednio wchodzą w interakcje z elementami umieszczonymi na płycie Elvis 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{img/obraz1.png}
+    \includegraphics[width=0.5\linewidth]{img/obraz1.jpg}
     \caption{Gotowy układ do generacji układów w LabVIEW}
     \label{fig:placeholder}
 \end{figure}
@@ -81,19 +85,19 @@ bezpośrednio wchodzą w interakcje z elementami umieszczonymi na płycie Elvis 
   \centering
   \begin{subfigure}{.48\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{img/obraz2.png}
+    \includegraphics[width=\linewidth]{img/obraz2.jpg}
     \caption{sygnał trojkatny A=5V , f=10Hz, offset=0V, faza=0\degree}
     \label{fig:sub1}
   \end{subfigure}\hfill
   \begin{subfigure}{.48\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{img/obraz3.png}
+    \includegraphics[width=\linewidth]{img/obraz3.jpg}
     \caption{sygnał sinusoidalny A=3.5V , f=100Hz, offset=5V, faza=0\degree}
     \label{fig:sub2}
   \end{subfigure}
   \begin{subfigure}{.48\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{img/obraz4.png}
+    \includegraphics[width=\linewidth]{img/obraz4.jpg}
     \caption{sygnał tropjkatny A=1V , f=20Hz, offset=-3V, faza=0\degree}
     \label{fig:sub3}
   \end{subfigure}
@@ -108,7 +112,7 @@ Zmodyfikowaliśmy połączenie na płycie tak ze pomiędzy wyjściem i wejściem
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.3\linewidth]{img/obraz5.png}
+    \includegraphics[width=0.3\linewidth]{img/obraz5.jpg}
     \caption{układ z kondensatorem}
     \label{fig:placeholder}
 \end{figure}
@@ -125,14 +129,21 @@ LabVIEW.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{img/image2.png}
+    \includegraphics[width=0.5\linewidth]{img/image2.jpg}
     \caption{Przebieg sygnału poddanego filtracji}
     \label{fig:placeholder}
 \end{figure}
 
-Na przebiegu powyżej można zauważyć, że sygnał na wyjściu filtru nie ma w sobie składowej stałej. Jest to spowodowane obecnością kondensatora, który pełni funkcje filtru górnoprzepustowego.
+Na przebiegu powyżej można zauważyć, że sygnał na wyjściu filtru nie ma w sobie składowej stałej. Jest to spowodowane
+ obecnością kondensatora, który pełni funkcje filtru górnoprzepustowego.
 
 \section{Wnioski}
+  W trakcie ćwiczenia skupiliśmy się na pracy w środowisku LabVIEW, które jest 
+  narzędziem do graficznego programowania i akwizycji danych. Poznaliśmy podstawowe
+   możliwości LabVIEW, takie jak tworzenie wirtualnych instrumentów (VI), obsługa 
+   bloków wejścia/wyjścia, generacja i rejestracja sygnałów oraz wizualizacja danych
+    w czasie rzeczywistym. Korzystajac z LabVIEW jestesmy w stanie w prosty wizualny sposob 
+    przygotowac skomplikowane uklady do generacji i pomiarów sygnałów.
 
 
 
