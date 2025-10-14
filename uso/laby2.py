@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt 
 import scipy.signal as sp
 
+from scipy.integrate import odeint
+
 
 def main():
     zad2_4()
@@ -58,18 +60,29 @@ def zad2_3():
 
 def zad2_4():
     t=np.arange(0,15,0.01)
+    res = [0]
+    for i in range(len(t)):
+        res.append(odeint(model(res[i],t[i]),0,t))
 
-    sys(10,t)
+    plt.figure()
+    plt.plot(t,res)
+    plt.show()
 
-def customstep(t):
-    return 1 if t>0 else 0
+def u(t):
+    return 1
 
-def sys(y,t):
-    kp = 2
-    T = 10
+def model(y,t):
+    kp=2
+    T=10
+    return (kp*u(t)-y)/T
+    
 
-    doty=(kp*customstep(t)-y)/T
-    return  doty
+def zad2_5():
+    t=np.arrange(0,15,0.01)
+
+    res= odeint()
+
+    pass
 
 
 
