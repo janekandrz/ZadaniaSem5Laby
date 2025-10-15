@@ -4,30 +4,18 @@ import scipy.signal as sp
 
 from scipy.integrate import odeint
 
-
-def main():
-    zad2_4()
+kp = 2
+T = 10
 
 def zad2():
-    kp = 2
-    T = 10
-
     # G(s) = kp/(T*s + 1)
     num = [kp]
     den = [T, 1]
     system = sp.TransferFunction(num, den)
     t, y = sp.step(system)
-    
-    plt.figure(figsize=(10, 6))
-    plt.plot(t, y, 'b-', linewidth=2, label=f'Step Response (Kp={kp}, T={T})')
-    plt.grid(True)
-    plt.xlabel('Time (s)')
-    plt.ylabel('Amplitude')
-    plt.xlim(left=0)
-    plt.ylim(bottom=0)
-    plt.title('Step Response')
-    plt.legend()
-    plt.show()
+    title= "Transfer function"
+
+    return t,y,title 
     
     '''
     print(f"Transfer function: {system}")
@@ -36,9 +24,6 @@ def zad2():
     '''
 
 def zad2_3():
-    kp = 2
-    T = 10
-
     A=-1/T
     B=kp/T
     C=1
@@ -46,45 +31,132 @@ def zad2_3():
 
     G = sp.StateSpace(A,B,C,D)
     t, y = sp.step(G)
+    title="State space"
+
+    return t,y,title
+
+def model(y,t): #zad2_4
+    u=1.0
+    dydt=(kp*u-y)/T
+    return dydt
+
+def zad2_5():
+    title="diff eq"
+    y0=0
+
+    t=np.arange(0, 70, 0.01)
+    ydot=odeint(model, y0, t)
+
+    return t,ydot,title
+
+
+
+def PlotStepResponse():
+    t1,y1,title1=zad2_3() #state space 
+    t2,y2,title2=zad2() # transfer function 
+    t3,y3,title3=zad2_5()# diff eq
+
 
     plt.figure(figsize=(10, 6))
-    plt.plot(t, y, 'b-', linewidth=2, label=f'Kp={kp}, T={T}')
+    plt.plot(t1, y1, 'b-', linewidth=10, label=f'{title1}')
+    plt.plot(t2,y2,'r-', linewidth=5, label=f'{title2}')
+    plt.plot(t3,y3,'g-', linewidth=2, label=f'{title3}')
     plt.grid(True)
     plt.xlabel('Time (s)')
     plt.ylabel('Amplitude')
     plt.xlim(left=0)
     plt.ylim(bottom=0)
-    plt.title('Step response tf from state space')
+    plt.title('Step response of the same system in diffrent notations')
     plt.legend()
     plt.show()
 
-def zad2_4():
-    t=np.arange(0,15,0.01)
-    res = [0]
-    for i in range(len(t)):
-        res.append(odeint(model(res[i],t[i]),0,t))
+    #odpowiedzi takie same (kto by sie spodziewal)
+    #forma reprezentacji nie zmienia wyjscia system reaguje tak samo na jednakowe pobudzenia 
 
-    plt.figure()
-    plt.plot(t,res)
+R=12
+L=1
+c=100e-6
+
+def zad3_1():
+    num=[1]
+    dem=[L,R,1/c]
+    sys=sp.TransferFunction(num,dem)
+    
+    t,y=sp.step(sys)
+    title="transfer function"
+    print(sys)
+    return t,y,title,sys
+
+def zad3_2():
+    A=np.array([[0,1],[-1/(L*c),-R/L]])
+    B=np.array([[0],[1/L]])
+    C=np.array([[0,1]])
+    D=np.array([[0]])
+
+    G = sp.StateSpace(A,B,C,D)
+    t, y = sp.step(G)
+    title="State space"
+
+    return t,y,title,G
+
+def zad3_3():
+    t1,y1,title1,sys1=zad3_1()
+    t2,y2,title2,sys2=zad3_2()
+
+    print(f'RLC circut in original tf: {sys1}')
+
+    sys2tf=sp.ss2tf(sys2)
+
+    print(f'RLC circut in tf from state space : {sys2tf}')
+
+    print(f'RLC circut in original state space: {sys2}')
+
+    sys1ss=sp.tf2ss(sys1)
+
+    print(f'RLC circut in state space from tf: {sys1ss}')
+
+#bron boze nie sa przeciez to kombinacje liniowe 
+#da sie bo to kombinacje liniowe pozdro 
+
+def PlotRlcResponse():
+    t1,y1,title1,sys1=zad3_1()
+    t2,y2,title2,sys2=zad3_2()
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(t1, y1, 'b-', linewidth=2, label=f'{title1}')
+    plt.plot(t2,y2,'r-', linewidth=2, label=f'{title2}')
+    #plt.plot(t3,y3,'g-', linewidth=2, label=f'{title3}')
+    plt.grid(True)
+    plt.xlabel('Time (s)')
+    plt.ylabel('Amplitude')
+    plt.xlim(left=0)
+    plt.ylim(bottom=0)
+    plt.title('Step response of the same system in diffrent notations')
+    plt.legend()
     plt.show()
 
-def u(t):
-    return 1
 
-def model(y,t):
-    kp=2
-    T=10
-    return (kp*u(t)-y)/T
-    
+def zad4_1():
+    L=0.5
+    m=1
+    d=0.1
 
-def zad2_5():
-    t=np.arrange(0,15,0.01)
+    J=1/3 * m * L**2
 
-    res= odeint()
+    A=np.array([[0,1],[0,-d/J]])
+    B=np.array([[0],[1/J]])
+    C=np.array([[1,0]])
+    D=np.array([[0]])
 
-    pass
+    sys=sp.StateSpace(A,B,C,D)
 
+    t,y=sp.step(sys)
 
+def main():
+    #PlotStepResponse()
+    #PlotRlcResponse()
+    #zad3_2()
+    zad4_1()
 
 if __name__=="__main__":
     main()
