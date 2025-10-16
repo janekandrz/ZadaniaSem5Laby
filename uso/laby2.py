@@ -78,13 +78,13 @@ L=1
 c=100e-6
 
 def zad3_1():
-    num=[1]
+    num=[1,0]
     dem=[L,R,1/c]
     sys=sp.TransferFunction(num,dem)
     
     t,y=sp.step(sys)
     title="transfer function"
-    print(sys)
+
     return t,y,title,sys
 
 def zad3_2():
@@ -123,15 +123,15 @@ def PlotRlcResponse():
     t2,y2,title2,sys2=zad3_2()
 
     plt.figure(figsize=(10, 6))
-    plt.plot(t1, y1, 'b-', linewidth=2, label=f'{title1}')
+    plt.plot(t1, y1, 'b-', linewidth=5, label=f'{title1}')
     plt.plot(t2,y2,'r-', linewidth=2, label=f'{title2}')
     #plt.plot(t3,y3,'g-', linewidth=2, label=f'{title3}')
     plt.grid(True)
     plt.xlabel('Time (s)')
     plt.ylabel('Amplitude')
     plt.xlim(left=0)
-    plt.ylim(bottom=0)
-    plt.title('Step response of the same system in diffrent notations')
+    #plt.ylim(bottom=0)
+    plt.title('Step response of the same system model in TF and state space')
     plt.legend()
     plt.show()
 
@@ -141,7 +141,7 @@ def zad4_1():
     m=1
     d=0.1
 
-    J=1/3 * m * L**2
+    J=(1/3) * m * L**2
 
     A=np.array([[0,1],[0,-d/J]])
     B=np.array([[0],[1/J]])
@@ -150,13 +150,73 @@ def zad4_1():
 
     sys=sp.StateSpace(A,B,C,D)
 
-    t,y=sp.step(sys)
+    t,y=sp.step(sys,None,np.arange(0,50,0.01))
+
+    title="manipulator response"
+    return t,y,title,sys
+
+def PlotManipulatorStepResponse():
+    t1,y1,title1,sys1=zad4_1()
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(t1, y1, 'b-', linewidth=5, label=f'{title1}')
+    #plt.plot(t2,y2,'r-', linewidth=2, label=f'{title2}')
+    #plt.plot(t3,y3,'g-', linewidth=2, label=f'{title3}')
+    plt.grid(True)
+    plt.xlabel('Time (s)')
+    plt.ylabel('Amplitude')
+    plt.xlim(left=0)
+    #plt.ylim(bottom=0)
+    plt.title('Step response of manipulator')
+    plt.legend()
+    plt.show()
+
+def zad4_2():
+    _,_,_,sys=zad4_1()
+
+    t=np.arange(0,50,0.01)
+    tau=np.arange(0,50,0.01)
+
+    t,res,x=sp.lsim(sys,tau,t,X0=None,)
+
+    title="ramp response"
+
+    return t,res,title
+
+def PlotManipulatorRampResponse():
+    t,y,title=zad4_2()
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(t, y, 'b-', linewidth=5, label=f'{title}')
+    plt.grid(True)
+    plt.xlabel('Time (s)')
+    plt.ylabel('Amplitude')
+    plt.xlim(left=0)
+    #plt.ylim(bottom=0)
+    plt.title('Step response of manipulator')
+    plt.legend()
+    plt.show()
+
+def PlotBodeCharacteristic():
+    t,y,title,sys=zad4_1()
+
+    w,mag,phase=sp.bode(sys)
+
+    plt.semilogx(w, mag)
+    plt.semilogx(w, phase)
+    plt.grid(True)
+    plt.xlabel("frequency[Hz]")
+    plt.ylabel("Amplitude[dB]")
+    plt.show()
+
 
 def main():
     #PlotStepResponse()
     #PlotRlcResponse()
-    #zad3_2()
-    zad4_1()
+    #PlotManipulatorStepResponse()
+    #PlotManipulatorRampResponse()
+    PlotBodeCharacteristic()
+    pass
 
 if __name__=="__main__":
     main()
