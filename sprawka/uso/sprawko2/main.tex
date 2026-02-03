@@ -65,7 +65,12 @@
 
 \section{Ćwiczenie 10-11: Linearyzacja systemu nieliniowego}
 
-\subsection{Opis problemu}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{img/wahadlo.png}
+    \caption{Schemat napedzanego wahadła}
+\end{figure}
 
 Rozważany jest model napędzanego wahadła będący obiektem nieliniowym. Przyjmując $x_1=\theta$ (położenie kątowe) i $x_2=\dot{\theta}$ (prędkość kątowa), równania stanu systemu przyjmują postać:
 
@@ -125,7 +130,7 @@ Rank macierzy $A$ wynosi 2, a rank macierzy sterowalności również wynosi 2. D
     \includegraphics[width=0.7\linewidth]{img/lininielin45sqrt.png}
 \end{figure}
 
-Z przebiegów można wyciągnąć jednoznaczny wniosek: linearyzacja wokół punktu pracy dobrze opisuje model tylko w jego bezpośrednim otoczeniu. Dla małych zaburzeń od punktu równowagi przebieg zmiennej z modelu zlinearyzowanego pokrywa się z przebiegiem modelu nieliniowego. Jednak przy zwiększaniu odchylenia od punktu pracy dokładność linearyzacji spada. Da się zaobserwowac wyraźne odchylenia pomiedzy modelem liniowym i nieliniowym dla wejscia $45\sqrt{2}$
+Z przebiegów można wyciągnąć jednoznaczny wniosek: linearyzacja wokół punktu pracy dobrze opisuje model tylko w jego bezpośrednim otoczeniu. Dla małych zaburzeń od punktu równowagi przebieg zmiennej z modelu zlinearyzowanego pokrywa się z przebiegiem modelu nieliniowego. Jednak przy zwiększaniu odchylenia od punktu pracy dokładność linearyzacji spada. Daje się zaobserwować wyraźne odchylenia między modelem liniowym i nieliniowym dla wejścia $45\sqrt{2}$.
 
 \subsection{Linearyzacja wokół punktu $x_0=[\pi/4,0]$, $u=45\sqrt{2}$}
 
@@ -150,17 +155,21 @@ A = \begin{bmatrix}
 \end{bmatrix}
 \]
 
-W przypadku linearyzacji wokół punkty innego niż $x_0=\begin{bmatrix} 0 & 0 \end{bmatrix}$, nalży wprowadzić nowe zmienne $\tilde{x}=x-x_0$ i $\tilde{u}=u-u_0$, ostatecznie otrzymano równania stanu w postacji:
+W przypadku linearyzacji wokół punktu innego niż $x_0=\begin{bmatrix} 0 & 0 \end{bmatrix}$, należy wprowadzić nowe zmienne $\tilde{x}=x-x_0$ i $\tilde{u}=u-u_0$. Ostatecznie otrzymano równania stanu w postaci:
 \[
 \dot{\tilde{x}}=A\tilde{x}+B\tilde{u}
 \]
 
-tutaj cos jeszcze 
+Nowy zlinearyzowany system interpretuje punkt, wokół którego został zlinearyzowany, jako swój nowy punkt równowagi. Dlatego to przesunięcie musi być wzięte pod uwagę.
+
+Przebieg położenia przy wytraceniu układu z równowagi warunkami początkowymi $x_0=\begin{bmatrix}
+    \pi/4 & 0
+\end{bmatrix}$:
 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{img/lab10_fig02.png}
+    \includegraphics[width=0.7\linewidth]{img/linpi4.png}
     \caption{Porównanie przebiegów modelu nieliniowego i zlinearyzowanego dla wymuszeń stałych}
 \end{figure}
 
@@ -170,36 +179,34 @@ Analogicznie do zadania 1.1, model zlinearyzowany prawidłowo opisuje zachowanie
 
 Metoda SDC polega na dyskretyzacji systemu w każdym kroku czasowym wokół bieżącego stanu, a następnie rozwiązaniu równań dyskretnych. Parametry macierzy $A$ są aktualizowane w zależności od bieżącego stanu systemu:
 
-TUTAJ COS DOPISAC I DAC PELNA MACIERSZ 
-
 \[
 \dot{x}=\begin{bmatrix}
     0 & 1 \\
-    -\frac{mgl}{J}\frac{sin(x_1)}{x_1} & -\frac{d}{J} 
+    -\frac{mgl}{J}\frac{\sin(x_1)}{x_1} & -\frac{d}{J} 
 \end{bmatrix}x+\begin{bmatrix}
     0 \\ \frac{1}{J}
 \end{bmatrix}u
-\]
-
-\[
-a_{21} = -\frac{mgl}{J} \cdot \frac{\sin(x_1)}{x_1}
 \]
 
 dla $x_1 \neq 0$, co pozwala na lepsze śledzenie nieliniowych zmian systemu w porównaniu ze statyczną linearyzacją.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{img/sdcinonlin.png}
-    \caption{Przebieg położenia dla modelu nieliniowego i zlinearyzowanego metoda SDC}
+    \includegraphics[width=0.7\linewidth]{img/sdcu0.png}
 \end{figure}
 
-Przebieg położenia przy wytraceniu układu z równowagi warunkami początkowymi $x_0=\begin{bmatrix}
-    \pi/4 & 0
-\end{bmatrix}$, 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{img/sdcu70.png}
+\end{figure}
 
-Metoda SDC oferuje lepszą dokładność niż klasyczna linearyzacja, ponieważ parametry modelu są adaptacyjnie aktualizowane na podstawie bieżącego stanu. Pozwala to na śledzenie trajektorii dala daleko od punktu linearyzacji.
 
-\subsection{Kod}
+
+Metoda SDC oferuje lepszą dokładność niż klasyczna linearyzacja, ponieważ parametry modelu są adaptacyjnie aktualizowane na podstawie bieżącego stanu. Pozwala to na śledzenie trajektorii daleko od punktu linearyzacji. Pomimo zalet metody SDC można zaobserwować rozbieżności dla dużych wielkości wejść. Dla dużych oscylacji rozbieżność między $\frac{\sin(x_1)}{x_1}$ a $\sin(x_1)$ rośnie.
+
+\newpage
+
+\subsection{Kod wyznaczający odpowiedź z użyciem parametryzacji SDC}
 
 \begin{lstlisting}
     m, l, J, g, d = 9.0, 1.0, 1.0, 10.0, 0.5
@@ -241,19 +248,17 @@ results_sdc = np.array(results_sdc)
 
 \section{Ćwiczenie 12: Regulator LQR dla układów nieliniowych}
 
-\subsection*{Zadanie 2.1: Nieliniowy model wahadła i jego liniowa aproksymacja}
+\subsection{Linearyzacja modelu wahadła wokół punktu $x_0 = [\pi, 0]$, $u_0 = 0$ }
 
-Rozpatrywany jest napędzany model wahadła:
-\[
-J\ddot{\theta} = u - d\dot{\theta} - mgl\sin(\theta)
-\]
+Rozpatrywany jest napędzany model wahadła analogiczny do ćwiczenia 10-11:
 
-Ze zmiennymi stanu $x_1 = \theta$, $x_2 = \dot{\theta}$, równania przyjmują postać:
 \[
-\dot{x}_1 = x_2
-\]
-\[
-\dot{x}_2 = \frac{1}{J}(u - dx_2 - mgl\sin(x_1))
+\dot{x}=\begin{bmatrix}
+    0 & 1 \\
+    -\frac{mgl}{J}\sin(x_1) & -\frac{d}{J}
+\end{bmatrix}x + \begin{bmatrix}
+    0 \\ \frac{1}{J}
+\end{bmatrix}u
 \]
 
 Linearyzacja wokół punktu $x_0 = [\pi, 0]$, $u_0 = 0$ daje:
@@ -261,7 +266,7 @@ Linearyzacja wokół punktu $x_0 = [\pi, 0]$, $u_0 = 0$ daje:
 \[
 A = \begin{bmatrix}
     0 & 1\\
-    -\frac{mgl\cos(\pi)}{J} & -\frac{d}{J}
+    -\frac{mgl}{J}\cos(\pi) & -\frac{d}{J}
 \end{bmatrix} = \begin{bmatrix}
     0 & 1\\
     \frac{mgl}{J} & -\frac{d}{J}
@@ -288,11 +293,15 @@ B = \begin{bmatrix}
 \end{bmatrix}
 \]
 
-\textbf{Dlaczego zmienne stanu dążą do nieskończoności przy pobudzeniu skokiem jednostkowym?}
+Punkt równowagi $x_0 = [\pi, 0]$ odpowiada wahadłu w pozycji pionowej. Jest to równowaga niestabilna:
 
-Punkt równowagi $x_0 = [\pi, 0]$ odpowiada wahadłu w pozycji górnej (wywyższonej). Jest to równowaga niestabilna, ponieważ pierwszymi charakterystycznymi macierzy $A$ są liczby rzeczywiste o przeciwnych znakach (jedno dodatnie, jedno ujemne). System jest siodłem (saddle point), co oznacza, że dowolne zaburzenie spowoduje odejście od równowagi. W szczególności, przy pobudzeniu skokiem jednostkowym, zmienne stanu będą dążyć do nieskończoności z powodu niestabilności tego punktu równowagi.
+\begin{lstlisting}
+    np.linalg.eigvals(A) #array([ 9.14960106, -9.64960106])
+\end{lstlisting}
 
-\subsection*{Zadanie 2.2: Projektowanie regulatora LQR}
+Wartości własne macierzy $A$ odpowiadające biegunom systemu wskazują na jego niestabilność: jeden biegun stabilny i jeden biegun niestabilny.
+
+\subsection{Projektowanie regulatora LQR}
 
 Zaprojektowano regulator LQR minimalizujący wskaźnik jakości:
 \[
@@ -312,24 +321,27 @@ K=\begin{bmatrix}
 \end{bmatrix}
 \]
 
-Prawo sterowania uwzgledniające punkt wokół którego układ został zlinearyzowany:
+Prawo sterowania uwzględniające punkt, wokół którego układ został zlinearyzowany:
 \[
-u = -K(x - x_0) + u_0
+\tilde{u} = -K(x - x_0) + u_0
 \]
 
-\textbf{Porównanie odpowiedzi dla różnych warunków początkowych:}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{img/lab12_fig01.png}
-    \caption{Przebiegi pierwszej zmiennej stanu dla różnych warunków początkowych z regulatorem LQR}
+    \includegraphics[width=0.8\linewidth]{img/lqrpoczatkowe.png}
 \end{figure}
 
-\textbf{Komentarz na temat globalności rozwiązania:}
+Otrzymane rozwiązanie nie jest globalne. Regulator LQR jest projektowany dla liniowego modelu systemu wokół punktu równowagi $[\pi, 0]$. Jego działanie jest gwarantowane jedynie dla małych zaburzeń wokół tego punktu. Dla większych odchyleń (np. wahadło bliskie pozycji dolnej $[0, 0]$) liniowy model nie reprezentuje już dokładnie dynamiki systemu nieliniowego, a regulator traci swoją efektywność. Biorąc to pod uwagę można wyciągnąć wniosek, że przebiegi dla dużych odchyleń nie mają jakiegokolwiek pokrycia z tym co można by zaobserwować w rzeczywistości. Implementując regulator przy założeniu takiej linearyzacji i nie startując z otoczenia warunków początkowych $x_0=\begin{bmatrix}
+    \pi & 0
+\end{bmatrix}$, nie zostałby odwzorowany taki przebieg jak w symulacji. 
 
-Otrzymane rozwiązanie \textbf{nie jest globalne}. Regulator LQR jest projektowany dla liniowego modelu systemu wokół punktu równowagi $[\pi, 0]$. Jego działanie jest gwarantowane jedynie dla małych zaburzeń wokół tego punktu. Dla większych odchyleń (np. wahadło bliskie pozycji dolnej $[0, 0]$) liniowy model nie reprezentuje już dokładnie dynamiki systemu nieliniowego, a regulator traci swoją efektywność. Ponadto, punkt równowagi $[\pi, 0]$ jest niestabilny, co dodatkowo ogranicza obszar atrakcji regulatora.
+\subsection{Manipulator elastyczny}
 
-\subsection*{Zadanie 2.3: Analiza manipulatora elastycznego}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{img/manipulator.png}
+\end{figure}
 
 Rozpatrywany jest manipulator z elastycznym złączem opisany równaniami:
 \[
@@ -355,32 +367,67 @@ Ze zmiennymi stanu $x = [\theta_1, \dot{\theta}_1, \theta_2, \dot{\theta}_2]^T$ 
 \dot{x}_4 = \frac{1}{J_2}(u + k(x_1 - x_3))
 \]
 
-\textbf{Wpływ parametrów LQR na regulację:}
+W postaci macierzowej:
+\[
+\dot{x} = \begin{bmatrix}
+    0 & 1 & 0 & 0 \\
+    -\frac{mgl}{J_1}\sin(x_1) - \frac{k}{J_1} & 0 & \frac{k}{J_1} & 0 \\
+    0 & 0 & 0 & 1 \\
+    \frac{k}{J_2} & 0 & -\frac{k}{J_2} & 0
+\end{bmatrix} x + \begin{bmatrix}
+    0 \\ 0 \\ 0 \\ \frac{1}{J_2}
+\end{bmatrix} u
+\]
+
+\subsection{Linearyzacja wokół punktu $x_0=\begin{bmatrix}0&0&0&0\end{bmatrix}$ i $u_0=0$}
+
+\[
+A = \begin{bmatrix}
+    0 & 1 & 0 & 0 \\
+    -\frac{mgl + k}{J_1} & 0 & \frac{k}{J_1} & 0 \\
+    0 & 0 & 0 & 1 \\
+    \frac{k}{J_2} & 0 & -\frac{k}{J_2} & 0
+\end{bmatrix}, \quad
+B = \begin{bmatrix}
+    0 \\ 0 \\ 0 \\ \frac{1}{J_2}
+\end{bmatrix}
+\]
+
+Podstawiając wartości parametrów:
+
+\[
+A = \begin{bmatrix}
+    0 & 1 & 0 & 0 \\
+    -137.5 & 0 & 75 & 0 \\
+    0 & 0 & 0 & 1 \\
+    10 & 0 & -10 & 0
+\end{bmatrix}, \quad
+B = \begin{bmatrix}
+    0 \\ 0 \\ 0 \\ 3.33
+\end{bmatrix}
+\]
+
+
+\subsection{Wpływ S, Q i R na przebiegi}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{img/lab12_fig02.png}
-    \caption{Porównanie przebiegów dla różnych macierzy Q regulatora LQR}
+    \includegraphics[width=0.8\linewidth]{img/lqrmanipulatorpolozenie.png}
+    \caption{Symulacja dla $S=I_4$}
+\end{figure}
+ 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{img/lqrmanipulatorS.png}
+    \caption{Symulacja dla $S=I_4 \cdot 0.5$}
 \end{figure}
 
-\textbf{Wyniki analizy:}
+Wyraźnie widac ze macierz S zgodnie z
 
-\begin{enumerate}
-    \item Dla $Q = I_4$: Regulator wyważa zarówno położenia jak i prędkości
-    \item Dla $Q = \text{diag}([10, 1, 10, 1])$: Silna penalizacja położeń, regulacja skupiona na stabilizacji pozycji
-    \item Dla $Q = \text{diag}([1, 10, 1, 10])$: Silna penalizacja prędkości, regulacja skupiona na tłumieniu oscylacji
-\end{enumerate}
+TODO dalej 3.4
 
-Wyniki pokazują, że dobór macierzy $Q$ znacząco wpływa na charakterystykę regulatora. Zwiększenie wag dla położeń prowadzi do szybszej redukcji błędu położenia, ale może powodować większe oscylacje. Z kolei zwiększenie wag dla prędkości poprawia tłumienie oscylacji kosztem wolniejszej zbieżności do stanu ustalonego.
 
-\textbf{Wnioski:}
-
-Praktyczne zastosowanie regulatorów LQR dla systemów nieliniowych wymaga ostrożności i weryfikacji w rzeczywistych warunkach. Liniowa teoria zapewnia gwarancje jedynie w małym otoczeniu punktu linearyzacji. Dla większych zaburzeń wymagane są bardziej zaawansowane metody, takie jak:
-\begin{itemize}
-    \item Adaptacyjne regulatory LQR z aktualizacją macierzy $A$ i $B$
-    \item Globalne regulatory z wykorzystaniem funkcji Lapunowa
-    \item Hybrydowe strategie sterowania łączące liniowe i nieliniowe podejścia
-\end{itemize}
 
 
 \end{document}
